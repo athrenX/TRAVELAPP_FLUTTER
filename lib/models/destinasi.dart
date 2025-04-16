@@ -56,4 +56,6 @@ class Destinasi {
       lokasi: map['lokasi'],
     );
   }
+
+  String get gambarUrl => gambar;
 }

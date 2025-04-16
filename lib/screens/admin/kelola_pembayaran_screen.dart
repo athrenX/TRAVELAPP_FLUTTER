@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:travelapp/services/pembayaran_service.dart';
 import 'package:travelapp/models/pembayaran.dart';
 
-class KelolaPembayaran extends StatefulWidget {
+class KelolaPembayaranScreen extends StatefulWidget {
   @override
-  State<KelolaPembayaran> createState() => _KelolaPembayaranState();
+  State<KelolaPembayaranScreen> createState() => _KelolaPembayaranState();
 }
 
-class _KelolaPembayaranState extends State<KelolaPembayaran> {
+class _KelolaPembayaranState extends State<KelolaPembayaranScreen> {
   final _service = PembayaranService();
   List<Pembayaran> _list = [];
 

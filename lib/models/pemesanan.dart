@@ -1,4 +1,3 @@
-//model data untuk pemesanan
 class Pemesanan {
   final String id;
   final String userId;
@@ -18,27 +17,25 @@ class Pemesanan {
     required this.totalHarga,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'userId': userId,
-      'destinasiId': destinasiId,
-      'kendaraanId': kendaraanId,
-      'jumlahPeserta': jumlahPeserta,
-      'tanggal': tanggal.toIso8601String(),
-      'totalHarga': totalHarga,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'user_id': userId,
+    'destinasiId': destinasiId,
+    'kendaraanIid': kendaraanId,
+    'jumlah_peserta': jumlahPeserta,
+    'tanggal': tanggal.toIso8601String(),
+    'total_harga': totalHarga,
+  };
 
-  factory Pemesanan.fromMap(Map<String, dynamic> map) {
+  factory Pemesanan.fromJson(Map<String, dynamic> json) {
     return Pemesanan(
-      id: map['id'],
-      userId: map['userId'],
-      destinasiId: map['destinasiId'],
-      kendaraanId: map['kendaraanId'],
-      jumlahPeserta: map['jumlahPeserta'],
-      tanggal: DateTime.parse(map['tanggal']),
-      totalHarga: map['totalHarga'],
+      id: json['id'],
+      userId: json['user_id'],
+      destinasiId: json['destinasi_id'],
+      kendaraanId: json['kendaraan_id'],
+      jumlahPeserta: json['jumlah_peserta'],
+      tanggal: DateTime.parse(json['tanggal']),
+      totalHarga: json['total_harga'],
     );
   }
 }

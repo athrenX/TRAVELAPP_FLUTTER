@@ -7,6 +7,8 @@ import 'package:travelapp/providers/destinasi_provider.dart';
 import 'package:travelapp/screens/auth/login_screen.dart';
 import 'package:travelapp/widgets/destinasi_card.dart';
 import 'package:travelapp/screens/user/detail_destinasi_screen.dart'; // Ensure this import points to the correct file
+import 'package:travelapp/screens/user/wishlist_screen.dart';
+import 'package:travelapp/providers/wishlist_provider.dart';
 
 void main() {
   runApp(
@@ -345,6 +347,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             : destinasiList.length,
                                     itemBuilder: (ctx, index) {
                                       final destinasi = destinasiList[index];
+                                      final isInWishlist =
+                                          Provider.of<WishlistProvider>(
+                                            context,
+                                            listen: false,
+                                          ).isInWishlist(destinasi.id);
                                       return GestureDetector(
                                         onTap: () {
                                           Navigator.push(
@@ -360,6 +367,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                         child: DestinasiCard(
                                           destinasi: destinasi,
+                                          isInWishlist: isInWishlist,
+                                          onWishlistChanged: () {
+                                            final wishlistProvider =
+                                                Provider.of<WishlistProvider>(
+                                                  context,
+                                                  listen: false,
+                                                );
+                                            final authProvider =
+                                                Provider.of<AuthProvider>(
+                                                  context,
+                                                  listen: false,
+                                                );
+
+                                            if (isInWishlist) {
+                                              wishlistProvider
+                                                  .removeFromWishlist(
+                                                    destinasi.id,
+                                                  );
+                                              ScaffoldMessenger.of(
+                                                ctx,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    '${destinasi.nama} dihapus dari wishlist',
+                                                  ),
+                                                  duration: Duration(
+                                                    seconds: 2,
+                                                  ),
+                                                ),
+                                              );
+                                            } else {
+                                              wishlistProvider.addToWishlist(
+                                                authProvider.user?.id ?? '',
+                                                destinasi.id,
+                                              );
+                                              ScaffoldMessenger.of(
+                                                ctx,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    '${destinasi.nama} ditambahkan ke wishlist',
+                                                  ),
+                                                  duration: Duration(
+                                                    seconds: 2,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
                                         ),
                                       );
                                     },
@@ -450,9 +506,25 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentNavIndex,
         onTap: (index) {
-          setState(() {
-            _currentNavIndex = index;
-          });
+          if (index == 2) {
+            // Wishlist index
+            final authProvider = Provider.of<AuthProvider>(
+              context,
+              listen: false,
+            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) =>
+                        WishlistScreen(userId: authProvider.user?.id ?? ''),
+              ),
+            );
+          } else {
+            setState(() {
+              _currentNavIndex = index;
+            });
+          }
         },
         selectedItemColor: Colors.blue.shade800,
         unselectedItemColor: Colors.grey,
