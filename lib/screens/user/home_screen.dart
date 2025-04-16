@@ -9,6 +9,7 @@ import 'package:travelapp/widgets/destinasi_card.dart';
 import 'package:travelapp/screens/user/detail_destinasi_screen.dart'; // Ensure this import points to the correct file
 import 'package:travelapp/screens/user/wishlist_screen.dart';
 import 'package:travelapp/providers/wishlist_provider.dart';
+import 'package:travelapp/screens/user/profil_screen.dart'; // Import the ProfileScreen file
 
 void main() {
   runApp(
@@ -165,9 +166,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.person),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
+            },
             tooltip: 'Akun',
           ),
+
           IconButton(
             icon: const Icon(
               Icons.logout,
