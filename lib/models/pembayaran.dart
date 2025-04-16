@@ -19,4 +19,13 @@ class Pembayaran {
       status: json['status'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'pemesanan_id': pemesananId,
+      'metode': metode,
+      'status': status,
+    };
+  }
 }

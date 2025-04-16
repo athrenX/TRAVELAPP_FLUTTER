@@ -22,4 +22,12 @@ class Review {
       rating: json['rating'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'user_id': userId,
+    'destinasi_id': destinasiId,
+    'komentar': komentar,
+    'rating': rating,
+  };
 }

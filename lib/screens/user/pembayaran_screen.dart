@@ -1,37 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:travelapp/models/pemesanan.dart';
+import 'package:travelapp/services/pembayaran_service.dart';
+import 'package:travelapp/models/pembayaran.dart';
 
-class PembayaranScreen extends StatelessWidget {
-  final Pemesanan pemesanan;
+class PembayaranScreen extends StatefulWidget {
+  final int pemesananId;
+  const PembayaranScreen({required this.pemesananId});
 
-  PembayaranScreen({required this.pemesanan});
+  @override
+  State<PembayaranScreen> createState() => _PembayaranScreenState();
+}
+
+class _PembayaranScreenState extends State<PembayaranScreen> {
+  final _service = PembayaranService();
+  List<Pembayaran> _list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadPembayaran();
+  }
+
+  void loadPembayaran() async {
+    final data = await _service.fetchPembayaranByPemesanan(widget.pemesananId);
+    setState(() => _list = data);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Pembayaran'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Destinasi: ${pemesanan.destinasiId}', style: TextStyle(fontSize: 20)),
-            SizedBox(height: 8),
-            Text('Kendaraan: ${pemesanan.kendaraanId}', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 16),
-            Text('Total Harga: Rp ${pemesanan.totalHarga}'),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Handle payment logic
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Pembayaran Berhasil')));
-              },
-              child: Text('Bayar'),
+      appBar: AppBar(title: Text('Pembayaran')),
+      body: ListView.builder(
+        itemCount: _list.length,
+        itemBuilder: (context, index) {
+          final p = _list[index];
+          return ListTile(
+            title: Text('Metode: ${p.metode}'),
+            subtitle: Text('Status: ${p.status ? 'Lunas' : 'Belum Lunas'}'),
+            trailing: Icon(
+              p.status ? Icons.check_circle : Icons.hourglass_bottom,
+              color: p.status ? Colors.green : Colors.orange,
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
